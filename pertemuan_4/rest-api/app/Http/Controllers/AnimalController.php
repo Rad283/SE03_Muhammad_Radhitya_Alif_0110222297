@@ -24,6 +24,8 @@ class AnimalController extends Controller
         # menambahkan hewan baru
         echo "Store - Menambahkan nama hewan: $request->nama";
         array_push($this->animals, $request->nama);
+
+        // memanggil method index untuk menampilkan daftar hewan
         $this->index();
     }
 
@@ -35,6 +37,8 @@ class AnimalController extends Controller
         } else {
             $this->animals[$id] = $request->nama;
             echo "mengupdate hewan dengan id $id menjadi $request->nama";
+
+            // memanggil method index untuk menampilkan daftar hewan
             $this->index();
         }
     }
@@ -45,7 +49,9 @@ class AnimalController extends Controller
             echo "id tidak ada";
         } else {
             array_splice($this->animals, $id);
-            echo "mengupdate hewan dengan id $id";
+            echo "menghapus hewan dengan id $id";
+
+            // memanggil method index untuk menampilkan daftar hewan
             $this->index();
         }
     }
