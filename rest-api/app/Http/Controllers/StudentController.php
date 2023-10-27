@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 class StudentController extends Controller
 {
     private $profile = "Nama: Muhammad Radhitya Alif  NIM: 0110222297  SE03";
+
     public function index()
     {
         $students = Student::all();
