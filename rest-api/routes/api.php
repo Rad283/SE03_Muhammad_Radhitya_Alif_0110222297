@@ -1,10 +1,11 @@
-<?php
+j<?php
 
-use App\Http\Controllers\AnimalController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+    use App\Http\Controllers\AnimalController;
+    use App\Http\Controllers\StudentController;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Route;
 
-/*
+    /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
@@ -15,13 +16,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+        return $request->user();
+    });
 
-Route::controller(AnimalController::class)->group(function () {
-    Route::get('/animals', 'index');
-    Route::post('/animals', 'store');
-    Route::put('/animals/{id}', 'update');
-    Route::delete('animals/{id}', 'destroy');
-});
+    Route::controller(AnimalController::class)->group(function () {
+        Route::get('/animals', 'index');
+        Route::post('/animals', 'store');
+        Route::put('/animals/{id}', 'update');
+        Route::delete('animals/{id}', 'destroy');
+    });
+
+    Route::controller(StudentController::class)->group(function () {
+        Route::get('/students', 'index');
+        Route::post('/students', 'post');
+        Route::put('/students/{id}', 'put');
+        Route::delete('students/{id}', 'destroy');
+    });
