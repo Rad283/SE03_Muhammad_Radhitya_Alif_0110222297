@@ -7,13 +7,15 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
+    private $profile = "Nama: Muhammad Radhitya Alif  NIM: 0110222297  SE03";
     public function index()
     {
         $students = Student::all();
 
         $data = [
+            'profile' => $this->profile,
             'message' => 'Show all students data',
-            'data' => $students
+            'data' => $students,
         ];
 
         return response()->json($data);
@@ -28,6 +30,7 @@ class StudentController extends Controller
             'jurusan' => $request->jurusan
         ]);
         $data = [
+            'profile' => $this->profile,
             'message' => 'Berhasil menambahkan',
             'data' => $students
         ];
@@ -43,6 +46,7 @@ class StudentController extends Controller
         $students->jurusan = $request->jurusan;
         $students->save();
         $data = [
+            'profile' => $this->profile,
             'message' => 'berhasil mengupdate data dengan id ' . $id,
             'data' => $request->all()
         ];
@@ -55,6 +59,7 @@ class StudentController extends Controller
         $students = Student::find($id);
         $students->delete();
         $data = [
+            'profile' => $this->profile,
             'message' => 'menghapus data dengan id ' . $id
         ];
 
