@@ -32,4 +32,5 @@ j<?php
         Route::post('/students', 'post');
         Route::put('/students/{id}', 'put');
         Route::delete('students/{id}', 'destroy');
+        Route::get('students/{id}', 'show');
     });
