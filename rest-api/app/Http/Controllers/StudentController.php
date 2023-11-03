@@ -40,30 +40,44 @@ class StudentController extends Controller
 
     public function put(Request $request, $id)
     {
-        $students = Student::find($id);
-        $students->nama = $request->nama;
-        $students->nim = $request->nim;
-        $students->email = $request->email;
-        $students->jurusan = $request->jurusan;
-        $students->save();
-        $data = [
-            'profile' => $this->profile,
-            'message' => 'berhasil mengupdate data dengan id ' . $id,
-            'data' => $request->all()
-        ];
-
-        return response()->json($data);
+        $student = Student::find($id);
+        if ($student) {
+            # menangkap data request
+            $input = [
+                'nama' => $request->nama ?? $student->nama,
+                'nim' => $request->nim ?? $student->nim,
+                'email' => $request->email ?? $student->email,
+                'jurusan' => $request->jurusan ?? $student->jurusan
+            ];
+            # melakukan update data
+            $student->update($input);
+            $data = [
+                'profile' => $this->profile,
+                'message' => 'Student is updated',
+                'data' => $student
+            ];
+            # mengembalikan data (json) dan kode 200
+            return response()->json($data, 200);
+        }
     }
 
     public function destroy($id)
     {
-        $students = Student::find($id);
-        $students->delete();
-        $data = [
-            'profile' => $this->profile,
-            'message' => 'menghapus data dengan id ' . $id
-        ];
+        $student = Student::find($id);
+        if ($student) {
+            $student->delete();
+            $data = [
+                'profile' => $this->profile,
+                'message' => 'menghapus data dengan id ' . $id
+            ];
 
-        return response()->json($data);
+            return response()->json($data);
+        } else {
+            $data = [
+                'profile' => $this->profile,
+                'message' => 'Delete - Id tidak ditemukan'
+            ];
+            return response()->json($data);
+        }
     }
 }
