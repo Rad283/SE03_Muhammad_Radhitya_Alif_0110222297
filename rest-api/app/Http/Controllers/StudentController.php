@@ -38,30 +38,14 @@ class StudentController extends Controller
     {
         $rules = [
             'nama' => 'required',
-            'nim' => 'required',
-            'email' => 'required',
+            'nim' => 'required|numeric',
+            'email' => 'required|email',
             'jurusan' => 'required'
         ];
-        $validator = Validator::make($request->all(), $rules, $messages = [
-            'nama.required' => 'gagal menambahkan, nama kosong!',
-            'nim.required' => 'gagal menambahkan, nim kosong!',
-            'email.required' => 'gagal menambahkan, email kosong!',
-            'jurusan.required' => 'gagal menambahkan, jurusan kosong!',
 
-        ]);
-        if ($validator->fails()) {
+        $validated = $request->validate($rules);
 
-            //pass validator errors as errors object for ajax response
-
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $students = Student::create([
-            'nama' => $request->nama,
-            'nim' => $request->nim,
-            'email' => $request->email,
-            'jurusan' => $request->jurusan
-        ]);
+        $students = Student::create($validated);
         $data = [
             'profile' => $this->profile,
             'message' => 'Berhasil menambahkan',
@@ -76,31 +60,20 @@ class StudentController extends Controller
 
         $rules = [
             'nama' => 'required',
-            'nim' => 'required',
-            'email' => 'required',
+            'nim' => 'required|numeric',
+            'email' => 'required|email',
             'jurusan' => 'required'
         ];
-        $validator = Validator::make($request->all(), $rules, $messages = [
-            'nama.required' => 'gagal menambahkan, nama kosong!',
-            'nim.required' => 'gagal menambahkan, nim kosong!',
-            'email.required' => 'gagal menambahkan, email kosong!',
-            'jurusan.required' => 'gagal menambahkan, jurusan kosong!',
 
-        ]);
-        if ($validator->fails()) {
-
-            //pass validator errors as errors object for ajax response
-
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+        $validated = $request->validate($rules);
 
         if ($student) {
             # menangkap data request
             $input = [
-                'nama' => $request->nama ?? $student->nama,
-                'nim' => $request->nim ?? $student->nim,
-                'email' => $request->email ?? $student->email,
-                'jurusan' => $request->jurusan ?? $student->jurusan
+                'nama' => $validated['nama'] ?? $student->nama,
+                'nim' => $validated['nim'] ?? $student->nim,
+                'email' => $validated['email'] ?? $student->email,
+                'jurusan' => $validated['jurusan'] ?? $student->jurusan
             ];
             # melakukan update data
             $student->update($input);
