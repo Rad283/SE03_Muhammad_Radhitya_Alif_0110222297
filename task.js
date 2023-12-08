@@ -3,19 +3,23 @@ const showDownload = (result) => {
   console.log(`Hasil Download ${result}`);
 };
 
-const download = (callShowDownload) => {
+const download = () => {
 
   return new Promise(resolve => {
     setTimeout(() => {
       const result = `windows-10.exe`;
-      resolve(callShowDownload(result))
+      resolve(result)
     }, `3000`)
   })
 }
 
 
 const main = async () => {
-  await download(showDownload);
+  try {
+    showDownload(await download());
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 main()
