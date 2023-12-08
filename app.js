@@ -1,27 +1,21 @@
-/**
- * TODO 9:
- * - Import semua method FruitController
- * - Refactor variable ke ES6 Variable
- *
- * @hint - Gunakan Destructing Object
- */
-
-const {index,store,update,destroy} = require("./Controller/FruitController");
-
-/**
- * NOTES:
- * - Fungsi main tidak perlu diubah
- * - Jalankan program: nodejs app.js
- */
-const main = () => {
-  console.log("Method index - Menampilkan Buah");
-  index();
-  console.log("\nMethod store - Menambahkan buah Pisang");
-  store("Pisang");
-  console.log("\nMethod update - Update data 0 menjadi Kelapa");
-  update(0, "Kelapa");
-  console.log("\nMethod destroy - Menghapus data 0");
-  destroy(0);
+const showDownload = (result) => {
+  console.log(`Download Selesai`);
+  console.log(`Hasil Download ${result}`);
 };
 
-main();
+const download = (callShowDownload) => {
+
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const result = `windows-10.exe`;
+      resolve(callShowDownload(result))
+    }, `3000`)
+  })
+}
+
+
+const main = async () => {
+  await download(showDownload);
+}
+
+main()
