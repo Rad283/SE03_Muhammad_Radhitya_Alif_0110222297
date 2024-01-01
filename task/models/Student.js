@@ -30,12 +30,8 @@ class Student {
 
 
     // promise 2
-    return new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM students WHERE id = ?`;
-      db.query(sql, id, (err, results) => {
-        resolve(results);
-      });
-    });
+    const student = this.find(id);
+    return student
   }
 
 
