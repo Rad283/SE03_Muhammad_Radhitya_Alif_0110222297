@@ -1,55 +1,82 @@
 // import database
 const db = require("../config/database");
 
-// membuat class Model Student
+// make Student model
 class Student {
-  /**
-   * Membuat method static all.
-   */
   static all() {
-    // return Promise sebagai solusi Asynchronous
     return new Promise((resolve, reject) => {
-      const sql = "SELECT * from students";
-      /**
-       * Melakukan query menggunakan method query.
-       * Menerima 2 params: query dan callback
-       */
-      db.query(sql, (err, results) => {
+      // lakukan query ke db untuk ambil data
+      const sql = "SELECT * FROM students";
+      db.query(sql, (sql, results) => {
         resolve(results);
       });
     });
   }
 
   /**
-   * TODO 1: Buat fungsi untuk insert data.
-   * Method menerima parameter data yang akan diinsert.
-   * Method mengembalikan data student yang baru diinsert.
-   */
-  static create(set) {
+* TODO 1: Buat fungsi untuk insert data.
+* Method menerima parameter data yang akan diinsert.
+* Method mengembalikan data student yang baru diinsert.
+*/
+
+  // promise 1
+  static async create(Student) {
+    const id = await new Promise((resolve, reject) => {
+      const sql = "INSERT INTO students SET ?";
+      db.query(sql, Student, (err, results) => {
+        resolve(results.insertId);
+      });
+    });
+
+
+    // promise 2
     return new Promise((resolve, reject) => {
-
-      const data = set;
-
-      const insert_query = "INSERT INTO students SET ?";
-
-      db.query(insert_query, data, (err, result) =>
-        err ? reject(err) : resolve(result))
-    })
+      const sql = `SELECT * FROM students WHERE id = ?`;
+      db.query(sql, id, (err, results) => {
+        resolve(results);
+      });
+    });
   }
+
 
   static find(id) {
+    // lakukan promise, select by id
     return new Promise((resolve, reject) => {
-      const where = id;
-
-      const sql = "SELECT * from students WHERE id=?";
-
-      db.query(sql, where, (err, result) =>
-        err ? reject(err) : resolve(result))
-
-    })
-
+      const sql = `SELECT * FROM students WHERE id = ?`;
+      db.query(sql, id, (err, results) => {
+        resolve(results[0]);
+      });
+    });
   }
+
+  static async update(id, data) {
+    // update data
+    await new Promise((resolve, reject) => {
+      // query untuk update data
+      const sql = "UPDATE students SET ? WHERE id = ?";
+      db.query(sql, [data, id], (err, results) => {
+        resolve(results);
+      });
+    });
+
+    // select data by id
+    const student = await this.find(id);
+    return student;
+  }
+
+  static async delete(id) {
+    // query delete
+    return new Promise((resolve, reject) => {
+      // query sql
+      const sql = "DELETE FROM students WHERE id = ?";
+      db.query(sql, id, (err, results) => {
+        resolve(results);
+      });
+    });
+  }
+
 }
 
-// export class Student
+
+// export model
 module.exports = Student;

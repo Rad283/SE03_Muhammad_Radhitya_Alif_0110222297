@@ -1,18 +1,17 @@
-// import Model Student
-const Student = require("../models/Student");
+// import model student
+const Student = require("../models/Student")
 
 class StudentController {
-  // menambahkan keyword async
   async index(req, res) {
-    // memanggil method static all dengan async await.
+    // TODO 4: Tampilkan data students
     const students = await Student.all();
 
     const data = {
-      message: "Menampilkkan semua students",
+      message: "Menampilkan data student",
       data: students
     };
 
-    res.json(data);
+    res.status(200).json(data);
   }
 
   async store(req, res) {
@@ -21,50 +20,111 @@ class StudentController {
      * Method create mengembalikan data yang baru diinsert.
      * Mengembalikan response dalam bentuk json.
      */
-    // code here
-    const insert = req.body;
 
-    const students = await Student.create(insert);
-
-
+    const students = await Student.create(req.body);
     const data = {
       message: "Menambahkan data student",
-      data: await Student.find(await students.insertId)
+      data: students,
     };
 
-    res.json(data);
+    res.status(201).json(data);
   }
 
-  update(req, res) {
-    const { id } = req.params;
-    const { nama } = req.body;
 
-    const data = {
-      message: `Mengedit student id ${id}, nama ${nama}`,
-      data: [],
-    };
-
-    res.json(data);
-  }
-
-  destroy(req, res) {
+  async update(req, res) {
+    /**
+     * check id students
+     * jika ada, lakukan update
+     * jika tidak, kirim data tidak ada
+     */
     const { id } = req.params;
 
-    const data = {
-      message: `Menghapus student id ${id}`,
-      data: [],
-    };
+    const students = await Student.find(id);
 
-    res.json(data);
+    if (students) {
+      // update data
+      const studentUpdated = await Student.update(id, req.body);
+      const data = {
+        message: "Mengupdate data student",
+        data: studentUpdated,
+      };
+
+      res.status(200).json(data);
+    }
+    else {
+      // kirim data tidak ada
+      const data = {
+        message: "Data tidak ada",
+      };
+
+      res.status(404).json(data);
+    }
+
+
+
   }
 
+  async destroy(req, res) {
+    const { id } = req.params;
 
+    /**
+     * cari id
+     * jika ada, hapus data
+     * jika tidak, kirim data tidak ada
+     */
+
+    const student = await Student.find(id);
+
+    if (student) {
+      // hapus data
+      await Student.delete(id);
+      const data = {
+        message: "Menghapus data student",
+      };
+
+      res.status(200).json(data);
+    }
+    else {
+      // data tidak ada
+      const data = {
+        message: "Data tidak ada",
+      };
+
+      res.status(404).json(data);
+    }
+  }
+
+  async show(req, res) {
+    /**
+     * cari id
+     * jika ada, kirim datanya
+     * jika tidak, kirim data tidak ada
+     */
+    const { id } = req.params;
+
+    const student = await Student.find(id);
+
+    if (student) {
+      const data = {
+        message: "Menampilkan detail data student",
+        data: student,
+      };
+
+      res.status(200).json(data);
+    }
+    else {
+      const data = {
+        message: "Data tidak ada",
+      };
+
+      res.status(404).json(data);
+    }
+
+  }
 }
 
-
-
-// Membuat object StudentController
+// make an object Student Controller
 const object = new StudentController();
 
-// Export object StudentController
+// export object
 module.exports = object;
