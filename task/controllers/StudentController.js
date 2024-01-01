@@ -20,6 +20,15 @@ class StudentController {
      * Method create mengembalikan data yang baru diinsert.
      * Mengembalikan response dalam bentuk json.
      */
+    // destructing object req. body
+    const { nama, nim, email, jurusan } = req.body;
+    // jika data undefined maka kirim response error
+    if (!nama || !nim || !email || !jurusan) {
+      const data = {
+        message: "Semua data harus dikirim",
+      }
+      return res.status(422).json(data);
+    }
 
     const students = await Student.create(req.body);
     const data = {
